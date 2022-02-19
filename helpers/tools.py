@@ -5,7 +5,6 @@ from pathlib import Path
 import noisereduce as nr
 import numpy as np
 from pydub import AudioSegment, effects 
-from ttkthemes import ThemedTk
 
 
 def removeNoise(pathaudio):
@@ -21,14 +20,14 @@ def removeNoise(pathaudio):
     soundmp3 = AudioSegment.from_wav(dst)
     soundmp3.export(src, format="mp3")
 
-def normalizeAudio(audio_path,numbermusic=1):
+def normalizeAudio(audio_path,numbermusic=1,volumenvoice=0.5,volumenmusic=20):
     rawsound = AudioSegment.from_file(audio_path, "mp3")  
     normalizedsound = effects.normalize(rawsound)  
     normalizedsound.export(audio_path, format="mp3")   
-    mindb = 20
+    mindb = volumenmusic
     sound1 = AudioSegment.from_file(str(audio_path), format="mp3")
     sound2 = AudioSegment.from_file("music/"+str(numbermusic)+".mp3", format="mp3")
-    sound1 = sound1
+    sound1 = sound1+volumenvoice
     overlay = sound1.overlay(sound2 - int(mindb)  , position=0)
     overlay.export(audio_path, format="mp3")
     audio_path = Path(audio_path)
